@@ -107,6 +107,11 @@ class SupaSocialsAuth extends StatefulWidget {
   /// Typically used to pass a DeepLink
   final String? redirectUrl;
 
+  /// Method used to launch oAuth url (e.g. external application)
+  /// 
+  /// Default is LaunchMode.platformDefault
+  final LaunchMode? authScreenLaunchMode;
+
   /// Method to be called when the auth action is success
   final void Function(Session session) onSuccess;
 
@@ -132,6 +137,7 @@ class SupaSocialsAuth extends StatefulWidget {
     required this.socialProviders,
     this.colored = true,
     this.redirectUrl,
+    this.authScreenLaunchMode,
     required this.onSuccess,
     this.onError,
     this.socialButtonVariant = SocialButtonVariant.iconAndText,
@@ -343,6 +349,7 @@ class _SupaSocialsAuthState extends State<SupaSocialsAuth> {
               await supabase.auth.linkIdentity(
                 socialProvider,
                 redirectTo: widget.redirectUrl,
+                authScreenLaunchMode: widget.authScreenLaunchMode,
                 scopes: widget.scopes?[socialProvider],
                 queryParams: widget.queryParams?[socialProvider],
               );
@@ -352,6 +359,7 @@ class _SupaSocialsAuthState extends State<SupaSocialsAuth> {
             await supabase.auth.signInWithOAuth(
               socialProvider,
               redirectTo: widget.redirectUrl,
+              authScreenLaunchMode: widget.authScreenLaunchMode,
               scopes: widget.scopes?[socialProvider],
               queryParams: widget.queryParams?[socialProvider],
             );
